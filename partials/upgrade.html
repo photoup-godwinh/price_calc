@@ -1,5 +1,5 @@
 <div ng-controller="UpgradeController as upgradeCtrl" style="margin-top: 50px;">
-	<h4>Old Plan</h4>
+	<h4>Current Plan</h4>
 	<table class="table">
 		<tr>
 			<td>Plan</td>
@@ -59,26 +59,38 @@
 				</tr>
 				<tr>
 					<td>Subscription Start Date</td>
-					<td ng-bind="calcCtrl.getNewStartDate(upgradeCtrl.plan_change_date)"></td>
+					<td ng-bind="(calcCtrl.getNewStartDate(upgradeCtrl.plan_change_date)||date:'MMM dd, yyyy')"></td>
 				</tr>
 				<tr>
 					<td>Subscription End Date</td>
-					<td ng-bind="calcCtrl.getNewEndDate(upgradeCtrl.plan_change_date, upgradeCtrl.new_term)">
+					<td ng-bind="(calcCtrl.getNewEndDate(upgradeCtrl.plan_change_date, upgradeCtrl.new_term)|date:'MMM dd, yyyy')">
 					</td>
 				</tr>
 				<tr>
-					<td>Amount</td>
+					<td>Plan Cost</td>
 					<td ng-bind="upgradeCtrl.plan.price[upgradeCtrl.new_term.toLowerCase()]|currency"></td>
 				</tr>
 				<tr>
 					<td>Deduction</td>
 					<td ng-bind="(upgradeCtrl.getDeduction()|currency)"></td>
 				</tr>
-				<tr>
-					<td>Payable</td>
+				<tr style="background: #ccc; color: #000; font-size: 16px;">
+					<td>Total Payable Today:</td>
 					<td ng-bind="upgradeCtrl.getPayable()|currency" style="font-weight:bold;"></td>
 				</tr>
 			</table>
+
+			<div style="margin-top: 20px;">
+				<p>Payable is computed using the ff: </p>
+				<code>
+					Deductible = OldPlanCost - (OldPlanCost/PlanDurationInDays*NumDaysUsed)
+					<br/>
+					Payable = NewPlanCost - Deductible
+				</code>
+				<p>Where,</p>
+				<p><code>PlanDurationInDays</code> is the length in days of the plan</p>
+				<p><code>NumDaysUsed</code> is total number of days the plan have been used</p>
+			</div>
 		</div>
 	</div>
 </div>

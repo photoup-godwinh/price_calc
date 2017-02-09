@@ -1,0 +1,83 @@
+<div style="margin-top: 20px; "
+	ng-controller="DowngradeController as downgradeCtrl">
+	<p>Downgrading of Plan will be different, it will not take effect immediately. </p>
+	<p>It will take effect after the user's current subscription. </p>
+	<p>If they are subscribe on a quarterly plan, say, Jan 01, 2017 to Apr 01, 2017, downgrade will take effect after April 01, 2017.</p>
+
+	<h4 style="margin-top: 20px;">Current Plan</h4>
+	<table class="table">
+		<tr>
+			<td>Plan</td>
+			<td ng-bind="downgradeCtrl.plan.name">
+			</td>
+		</tr>
+		<tr>
+			<td>Term</td>
+			<td>
+				<select 
+					ng-model="downgradeCtrl.term">
+					<option ng-repeat="term in calcCtrl.terms" ng-value="term" ng-bind="term"></option>
+				</select>
+			</td>
+		</tr>
+		<tr>
+			<td>Subscription Start Date</td>
+			<td>
+				<md-datepicker ng-model="downgradeCtrl.start_date" md-placeholder="Start date"></md-datepicker>
+			</td>
+		</tr>
+		<tr>
+			<td>Subscription End Date</td>
+			<td>
+				<md-datepicker ng-model="downgradeCtrl.end_date" md-placeholder="End date" disabled></md-datepicker>
+			</td>
+		</tr>
+		<tr>
+			<td>Amount Paid</td>
+			<td ng-bind="downgradeCtrl.plan.price[downgradeCtrl.term.toLowerCase()]|currency"></td>
+		</tr>
+	</table>
+
+	<p style="margin: 40px 0 40px 0;">
+		<strong>Decides to downgrade on: </strong>
+		<md-datepicker ng-model="downgradeCtrl.plan_change_date" md-placeholder="Enter Date"
+			md-min-date="downgradeCtrl.start_date" md-max-date="downgradeCtrl.max_downgrade_date"></md-datepicker>
+	</p>
+
+	<div ng-if="downgradeCtrl.plan_change_date">
+		<div ng-if="downgradeCtrl.plan_change_date">
+			<h4>Downgrades Plan to: </h4>
+			<table class="table">
+				<tr>
+					<td>Plan</td>
+					<td ng-bind="downgradeCtrl.new_plan.name"></td>
+				</tr>
+				<tr>
+					<td>Term</td>
+					<td>
+						<select 
+							ng-model="downgradeCtrl.new_term">
+							<option ng-repeat="term in calcCtrl.terms" ng-value="term" ng-bind="term"></option>
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<td>Subscription Start Date</td>
+					<td ng-bind="downgradeCtrl.end_date|date:'MMM dd, yyyy'"></td>
+				</tr>
+				<tr>
+					<td>Subscription End Date</td>
+					<td ng-bind="downgradeCtrl.getNewEndDate()|date:'MMM dd, yyyy'"></td>
+				</tr>
+				<tr>
+					<td>Plan Cost</td>
+					<td ng-bind="downgradeCtrl.plan.price[downgradeCtrl.new_term.toLowerCase()]|currency"></td>
+				</tr>
+				<tr style="background: #ccc; color: #000; font-size: 16px;">
+					<td>Amount to be billed on {{ downgradeCtrl.end_date|date:'MMM dd, yyyy' }}</td>
+					<td ng-bind="downgradeCtrl.new_plan.price[downgradeCtrl.new_term.toLowerCase()]|currency"></td>
+				</tr>
+			</table>
+		</div>
+	</div>
+</div>

@@ -1,5 +1,5 @@
 <div ng-controller="TermController as termCtrl" style="margin-top: 50px;">
-	<h4>Old Plan Term</h4>
+	<h4>Current Plan Term</h4>
 	<table class="table">
 		<tr>
 			<td>Plan</td>
@@ -42,7 +42,7 @@
 
 	<div ng-if="termCtrl.new_term">
 		<p style="margin: 40px 0 40px 0;">
-			<strong>Decides to change term on: </strong>
+			<strong>Decides to change the payment terms by: </strong>
 			<md-datepicker ng-model="termCtrl.plan_change_date" md-placeholder="Enter Date"
 				md-min-date="termCtrl.start_date" md-max-date="termCtrl.end_date"></md-datepicker>
 		</p>
@@ -65,27 +65,38 @@
 				</tr>
 				<tr>
 					<td>Subscription Start Date</td>
-					<td ng-bind="termCtrl.getNewStartDate()"></td>
+					<td ng-bind="(calcCtrl.getNewStartDate(termCtrl.plan_change_date)|date:'MMM dd, yyyy')"></td>
 				</tr>
 				<tr>
 					<td>Subscription End Date</td>
-					<td ng-bind="termCtrl.getNewEndDate()">
-						<!-- <md-datepicker ng-model="termCtrl.getNewEndDate()" md-placeholder="End date" disabled></md-datepicker> -->
+					<td ng-bind="(calcCtrl.getNewEndDate(termCtrl.plan_change_date, termCtrl.new_term)|date:'MMM dd, yyyy')">
 					</td>
 				</tr>
 				<tr>
-					<td>Amount</td>
+					<td>Plan Cost</td>
 					<td ng-bind="termCtrl.plan.price[termCtrl.new_term.toLowerCase()]|currency"></td>
 				</tr>
 				<tr>
 					<td>Deduction</td>
 					<td ng-bind="(termCtrl.getDeduction()|currency)"></td>
 				</tr>
-				<tr>
-					<td>Payable</td>
+				<tr style="background: #ccc; color: #000; font-size: 16px;">
+					<td>Total Payable Today:</td>
 					<td ng-bind="termCtrl.getPayable()|currency" style="font-weight:bold;"></td>
 				</tr>
 			</table>
+
+			<div style="margin-top: 20px;">
+				<p>Payable is computed using the ff: </p>
+				<code>
+					Deductible = OldPlanCost - (OldPlanCost/PlanDurationInDays*NumDaysUsed)
+					<br/>
+					Payable = NewPlanCost - Deductible
+				</code>
+				<p>Where,</p>
+				<p><code>PlanDurationInDays</code> is the length in days of the plan</p>
+				<p><code>NumDaysUsed</code> is total number of days the plan have been used</p>
+			</div>
 		</div>
 	</div>
 </div>

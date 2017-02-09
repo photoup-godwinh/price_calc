@@ -1,0 +1,68 @@
+<div style="margin-top: 20px; "
+	ng-controller="CancellationController as cancelCtrl">
+
+	<h4 style="margin-top: 20px;">Current Plan</h4>
+	<table class="table">
+		<tr>
+			<td>Plan</td>
+			<td ng-bind="cancelCtrl.plan.name">
+			</td>
+		</tr>
+		<tr>
+			<td>Term</td>
+			<td>
+				<select 
+					ng-model="cancelCtrl.term">
+					<option ng-repeat="term in calcCtrl.terms" ng-value="term" ng-bind="term" ng-if="term!='Monthly'"></option>
+				</select>
+			</td>
+		</tr>
+		<tr>
+			<td>Subscription Start Date</td>
+			<td>
+				<md-datepicker ng-model="cancelCtrl.start_date" md-placeholder="Start date"></md-datepicker>
+			</td>
+		</tr>
+		<tr>
+			<td>Subscription End Date</td>
+			<td>
+				<md-datepicker ng-model="cancelCtrl.end_date" md-placeholder="End date" disabled></md-datepicker>
+			</td>
+		</tr>
+		<tr>
+			<td>Amount Paid / Plan Cost</td>
+			<td ng-bind="cancelCtrl.plan.price[cancelCtrl.term.toLowerCase()]|currency"></td>
+		</tr>
+	</table>
+
+	<div class="row" style="margin: 40px 0 40px 0;">
+		<div class="col-md-12">
+			<strong>Decides to cancels by: </strong>
+			<md-datepicker ng-model="cancelCtrl.cancel_date" md-placeholder="Enter Date"
+				md-min-date="cancelCtrl.start_date" md-max-date="cancelCtrl.end_date"></md-datepicker>
+		</div>
+		<div class="col-md-12" ng-if="cancelCtrl.cancel_date" style="margin-top: 10px;">
+			<table class="table">
+				<tr>
+					<td>PlanDurationInDays</td>
+					<td ng-bind="cancelCtrl.getPlanDurationInDays()"></td>
+				</tr>
+				<tr>
+					<td>NumDaysUsed</td>
+					<td ng-bind="cancelCtrl.getNumDaysUsed()"></td>
+				</tr>
+				<tr style="background: #ccc; color: #000; font-size: 16px;">
+					<td>Amount to Refund: </td>
+					<td><strong ng-bind="(cancelCtrl.getAmountToRefund()|currency)"></strong></td>
+				</tr>
+			</table>
+
+			<code>
+				Amount to Refund = ((PlanDurationInDays-NumDaysUsed) * (PlanCost/PlanDurationInDays))/2
+			</code>, 
+			where, 
+			<p><code>PlanDurationInDays</code> is the length in days of the plan</p>
+			<p><code>NumDaysUsed</code> is total number of days the plan have been used</p>
+		</div>
+	</div>
+</div>
