@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html ng-app="CalcApp">
+<head>
+	<title>Folio Calculator</title>
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" />
+	<link rel="stylesheet" href="bower_components/angular-material/angular-material.css">
+	<script type="text/javascript" src="bower_components/underscore/underscore-min.js"></script>
+	<script type="text/javascript" src="bower_components/moment/moment.js"></script>
+	<script type="text/javascript" src="bower_components/angular/angular.min.js"></script>
+	<script src="bower_components/angular-aria/angular-aria.js"></script>
+    <script src="bower_components/angular-animate/angular-animate.js"></script>
+    <script src="bower_components/angular-material/angular-material.js"></script>
+    <script src="bower_components/angular-moment/angular-moment.min.js"></script>
+</head>
+<body>
+	<div class="container" ng-controller="CalcController as calcCtrl">
+		<div class="row">
+			<div class="col-md-12">
+				<h2>Plans</h2>
+				<table class="table">
+					<thead>
+						<tr>
+							<td>Plan</td>
+							<td>Monthly ($)</td>
+							<td>Quarterly ($)</td>
+							<td>Annual ($)</td>
+						</tr>
+					</thead>
+					<tbody>
+						<tr ng-repeat="plan in calcCtrl.plans">
+							<td ng-bind="plan.name"></td>
+							<td ng-bind="plan.price.monthly|currency"></td>
+							<td ng-bind="plan.price.quarterly|currency"></td>
+							<td ng-bind="plan.price.annual|currency"></td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+
+		<div class="row">
+			<div class="col-md-3">
+				<h3>Select Calculator Type:</h3>
+			</div>
+			<div class="col-md-9">
+				<select ng-model="calcCtrl.type" style="margin-top: 25px;">
+					<option value="term">Plan Payment Term Calculator</option>
+					<option value="upgrade">Plan Upgrade Calculator</option>
+					<option value="downgrade">Plan Downgrade</option>
+					<option value="cancellation">Plan Cancellation</option>
+					<option value="storage">Storage</option>
+				</select>
+			</div>
+		</div>
+		
+		<div class="row">
+			<div class="col-md-12">
+				<div ng-switch on="calcCtrl.type">
+					<div ng-switch-when="term">
+						<div ng-include="'partials/term.html'"></div>
+					</div>
+					<div ng-switch-when="upgrade">
+						<div ng-include="'partials/upgrade.html'"></div>
+					</div>
+					<div ng-switch-when="downgrade">
+						<div ng-include="'partials/downgrade.html'"></div>
+					</div>
+					<div ng-switch-when="cancellation">
+						<div ng-include="'partials/cancellation.html'"></div>
+					</div>
+					<div ng-switch-when="storage">
+						<div ng-include="'partials/storage.html'"></div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<script type="text/javascript" src="scripts/app.js"></script>
+</body>
+</html>

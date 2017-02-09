@@ -1,0 +1,84 @@
+<div ng-controller="UpgradeController as upgradeCtrl" style="margin-top: 50px;">
+	<h4>Old Plan</h4>
+	<table class="table">
+		<tr>
+			<td>Plan</td>
+			<td>
+				Portfolio
+			</td>
+		</tr>
+		<tr>
+			<td>Term</td>
+			<td>
+				<select 
+					ng-model="upgradeCtrl.term">
+					<option ng-repeat="term in calcCtrl.terms" ng-value="term" ng-bind="term"></option>
+				</select>
+			</td>
+		</tr>
+		<tr>
+			<td>Subscription Start Date</td>
+			<td>
+				<md-datepicker ng-model="upgradeCtrl.start_date" md-placeholder="Start date"></md-datepicker>
+			</td>
+		</tr>
+		<tr>
+			<td>Subscription End Date</td>
+			<td>
+				<md-datepicker ng-model="upgradeCtrl.end_date" md-placeholder="End date" disabled></md-datepicker>
+			</td>
+		</tr>
+		<tr>
+			<td>Amount Paid</td>
+			<td ng-bind="upgradeCtrl.getAmountPaid()|currency"></td>
+		</tr>
+	</table>
+
+	<div>
+		<p style="margin: 40px 0 40px 0;">
+			<strong>Decides to upgrade on: </strong>
+			<md-datepicker ng-model="upgradeCtrl.plan_change_date" md-placeholder="Enter Date"
+				md-min-date="upgradeCtrl.start_date" md-max-date="upgradeCtrl.end_date"></md-datepicker>
+		</p>
+
+		<div ng-if="upgradeCtrl.plan_change_date">
+			<h4>Upgrades To: </h4>
+			<table class="table">
+				<tr>
+					<td>Plan</td>
+					<td>Pro</td>
+				</tr>
+				<tr>
+					<td>Term</td>
+					<td>
+						<select 
+							ng-model="upgradeCtrl.new_term">
+							<option ng-repeat="term in calcCtrl.getNewTermsGTE(upgradeCtrl.term)" ng-value="term" ng-bind="term"></option>
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<td>Subscription Start Date</td>
+					<td ng-bind="calcCtrl.getNewStartDate(upgradeCtrl.plan_change_date)"></td>
+				</tr>
+				<tr>
+					<td>Subscription End Date</td>
+					<td ng-bind="calcCtrl.getNewEndDate(upgradeCtrl.plan_change_date, upgradeCtrl.new_term)">
+					</td>
+				</tr>
+				<tr>
+					<td>Amount</td>
+					<td ng-bind="upgradeCtrl.plan.price[upgradeCtrl.new_term.toLowerCase()]|currency"></td>
+				</tr>
+				<tr>
+					<td>Deduction</td>
+					<td ng-bind="(upgradeCtrl.getDeduction()|currency)"></td>
+				</tr>
+				<tr>
+					<td>Payable</td>
+					<td ng-bind="upgradeCtrl.getPayable()|currency" style="font-weight:bold;"></td>
+				</tr>
+			</table>
+		</div>
+	</div>
+</div>

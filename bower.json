@@ -1,0 +1,23 @@
+{
+  "name": "calc",
+  "description": "",
+  "main": "index.js",
+  "authors": [
+    "Godwinh Lopez <godwinh@photoup.net>"
+  ],
+  "license": "BSD-2-Clause",
+  "homepage": "",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "angular-moment": "^1.0.1",
+    "angular": "^1.6.2",
+    "moment": "^2.17.1",
+    "underscore": "^1.8.3"
+  }
+}
